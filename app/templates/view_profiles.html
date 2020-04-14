@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% include 'flash_messages.html' %}
+<div class="">
+    <h2>Profiles</h2>
+    {% for profile in profiles %}
+        <div class="card-form row align-items-center my-4 py-3">
+            <div class="col-sm-3 profiles-list-img">
+                <img class="img-fluid" src="{{ url_for('static', filename = 'uploads/'+profile.image)}}"></img>
+            </div>
+            <div class="col-sm-6">
+                <h4>{{ profile.fname }} {{ profile.lname }}</h4>
+                <div class="icons">
+                    <i class="far fa-user"></i>{{ profile.gender }}
+                    <br>
+
+                    <i class="fas fa-map-marker-alt"></i>{{ profile.location }}
+                    <br>
+
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <a href="{{ url_for('view_profile',userid=profile.id) }}">
+                    <button class="btn btn-success view-p-btn">View Profile</button>
+                </a>
+            </div>
+        </div>
+{% endfor %}
+</div>
+{% endblock %}

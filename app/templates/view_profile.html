@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1 class="page-header">Profile Details</h1>
+<div class="card-form row align-items-center mx-auto my-4 px-4 py-2 ">
+    <div class="col-sm-4">
+        <img class = "img-fluid" src="{{ url_for('static', filename = 'uploads/'+user.image)}}">
+    </div>
+    <div class="col-sm-8">
+        <h3>{{ user.fname }} {{ user.lname }}</h3>
+        <div class="">
+            <i class="fa fa-envelope"></i>
+            {{ user.email }}
+            <br>
+
+            <i class="fas fa-map-marker-alt"></i>
+            {{ user.location }}
+            <br>
+
+            <i class="far fa-calendar-alt"></i>
+            Joined on {{ user.date_created }}
+            <br>
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <h3 class="row">About Me</h3>
+        <p class="row">{{ user.bio }}</p>
+    </div>
+    <div class="col-sm-10">
+        <div class="profile-btn">
+            <button class="btn btn-success px-5">Send Message</button>
+            <button class="btn btn-primary px-5">Follow</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

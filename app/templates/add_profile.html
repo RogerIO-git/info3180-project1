@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% include 'flash_messages.html' %}
+<div class="">
+    <h1 class="page-header"><strong>Add Profile</strong></h1>
+    <div>
+        <form class="card-form row align-items-center mx-auto my-2 px-2 py-5 " action="{{ url_for('add_profile')}}" method="post" enctype="multipart/form-data" novalidate>
+            {{ form.csrf_token }}
+            <div class="col-sm-8 form-group">
+                {{ form.first_name.label('First Name') }}
+                {{ form.first_name(class='form-control') }}
+                {% for message in form.first_name.errors %} <small>{{ message }}</small>{% endfor %}
+            </div>
+            <div class="col-sm-8 form-group">
+                {{ form.last_name.label('Last Name') }}
+                {{ form.last_name(class='form-control') }}
+                {% for message in form.last_name.errors %} <small>{{ message }}</small>{% endfor %}
+            </div>
+            <div class="col-sm-8 form-group">
+                {{ form.gender.label('Gender') }}
+                {{ form.gender(class='form-control', placeholder='Select Gender') }}
+                {% for message in form.gender.errors %} <small>{{ message }}</small>{% endfor %}
+            </div>
+            <div class="col-sm-8 form-group">
+                {{ form.email.label('Email') }}
+                {{ form.email(class='form-control', placeholder='e.g. name@gmail.com') }}
+                {% for message in form.email.errors %} <small>{{ message }}</small>{% endfor %}
+            </div>
+            <div class="col-sm-8 form-group">
+                {{ form.location.label('Location') }}
+                {{ form.location(class='form-control', placeholder='e.g. New York City, New York') }}
+                {% for message in form.location.errors %} <small>{{ message }}</small>{% endfor %}
+            </div>
+            <div class="col-sm-8 form-group">
+                {{ form.bio.label('Biography') }}
+                {{ form.bio(class='form-control') }}
+                {% for message in form.bio.errors %} <small>{{ message }}</small>{% endfor %}
+            </div>
+            <div class="col-sm-9 form-group">
+                {{ form.photo.label('Profile Picture') }}
+                {{ form.photo(class='form-control') }}
+                {% for message in form.photo.errors %} <small>{{ message }}</small>{% endfor %}
+            </div>
+            <div class="col-sm-4">
+                <button type="submit" name="submit" class="btn view-p-btn btn-success">Add Profile</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

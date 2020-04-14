@@ -4,13 +4,15 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
-from app import app, db, login_manager
-from flask import render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm
+import os
+import datetime
+from app import app, db
+from flask import render_template, request, redirect, url_for, flash, session
+from werkzeug.utils import secure_filename
+from app.forms import ProfileForm
 from app.models import UserProfile
 
+path = app.config['UPLOAD_FOLDER']
 
 ###
 # Routing for your application.
@@ -27,35 +29,48 @@ def about():
     """Render the website's about page."""
     return render_template('about.html')
 
+@app.route('/profile', methods=['GET','POST'])
+def add_profile():
+    """GET provides the profile form while POST stores profile"""
+    profileform = ProfileForm()
+    if request.method == 'POST' and profileform.validate_on_submit():
+        # Get values from form
+        fname = request.form['first_name']
+        lname = request.form['last_name']
+        gender = request.form['gender']
+        email = request.form['email']
+        location = request.form['location']
+        bio = request.form['bio']
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if request.method == "POST":
-        # change this to actually validate the entire form submission
-        # and not just one field
-        if form.username.data:
-            # Get the username and password values from the form.
-
-            # using your model, query database for a user based on the username
-            # and password submitted. Remember you need to compare the password hash.
-            # You will need to import the appropriate function to do so.
-            # Then store the result of that query to a `user` variable so it can be
-            # passed to the login_user() method below.
-
-            # get user id, load into session
-            login_user(user)
-
-            # remember to flash a message to the user
-            return redirect(url_for("home"))  # they should be redirected to a secure-page route instead
-    return render_template("login.html", form=form)
+        file = profileform.photo.data
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(path, filename))
+        
+        try:
+           
+            profile = UserProfile(fname, lname, gender, email, location, bio, filename)
+            db.session.add(profile)
+            db.session.commit()
+            flash('Profile Saved', 'success')
+            return redirect(url_for('view_profiles'))
+        except:
+            flash("Profile failed to save", 'danger')
+    return render_template('add_profile.html', form = profileform)
 
 
-# user_loader callback. This callback is used to reload the user object from
-# the user ID stored in the session
-@login_manager.user_loader
-def load_user(id):
-    return UserProfile.query.get(int(id))
+@app.route('/profiles')
+def view_profiles():
+    """Retrieve all profiles from the database."""
+    profiles = db.session.query(UserProfile).all()
+    return render_template("view_profiles.html", profiles = profiles)
+
+
+@app.route('/profile/<userid>')
+def view_profile(userid):
+    """Fetch the user information for a profile that matches the id"""
+    user = db.session.query(UserProfile).get(userid)
+    return render_template("view_profile.html", user=user)
+
 
 ###
 # The functions below should be applicable to all Flask apps.
