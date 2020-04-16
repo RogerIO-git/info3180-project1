@@ -47,7 +47,6 @@ def add_profile():
         file.save(os.path.join(path, filename))
         
         try:
-           
             profile = UserProfile(fname, lname, gender, email, location, bio, filename)
             db.session.add(profile)
             db.session.commit()

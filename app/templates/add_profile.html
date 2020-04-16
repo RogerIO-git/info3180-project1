@@ -37,13 +37,13 @@
                 {{ form.bio(class='form-control') }}
                 {% for message in form.bio.errors %} <small>{{ message }}</small>{% endfor %}
             </div>
-            <div class="col-sm-9 form-group">
+            <div class="col-sm-8 form-group">
                 {{ form.photo.label('Profile Picture') }}
                 {{ form.photo(class='form-control') }}
                 {% for message in form.photo.errors %} <small>{{ message }}</small>{% endfor %}
             </div>
             <div class="col-sm-4">
-                <button type="submit" name="submit" class="btn view-p-btn btn-success">Add Profile</button>
+                <button type="submit" name="submit" class="btn btn-success">Add Profile</button>
             </div>
 
         </form>
